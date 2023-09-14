@@ -17,11 +17,20 @@ center = (200, 200)
 
 times_clicked = 0
 
+def circle_points(x, y, center):
+    screen.set_at((x + center[0], y + center[1]), white)
+    screen.set_at((y + center[0], x + center[1]), white)
+    screen.set_at((y + center[0], -x + center[1]), white)
+    screen.set_at((x + center[0], -y + center[1]), white)
+    screen.set_at((-x + center[0], -y + center[1]), white)
+    screen.set_at((-y + center[0], -x + center[1]), white)
+    screen.set_at((-y + center[0], x + center[1]), white)
+    screen.set_at((-x + center[0], y + center[1]), white)
 def plot_circle(radius, center):
     x = 0
     y = radius
     d = 5/4.0 - radius
-    center_points(x, y, center)
+    circle_points(x, y, center)
     while y > x:
         if d < 0:
             d = d + 2 * x + 3
