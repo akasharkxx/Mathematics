@@ -3,6 +3,8 @@ from Cube import *
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from Object import *
+from Transform import *
 
 pygame.init()
 screen_width = 500
@@ -26,7 +28,19 @@ glLightfv(GL_LIGHT0, GL_DIFFUSE, (1, 0, 0, 1))
 glEnable(GL_LIGHT0)
 glMaterialfv(GL_FRONT, GL_DIFFUSE, (0, 1, 0, 1))
 
-cube = Cube(GL_POLYGON, "../images/brick.tif")
+objects = []
+
+cube = Object("Cube")
+cube.add_component(Transform((0, -1, 0)))
+cube.add_component(Cube(GL_POLYGON, "../images/brick.tif"))
+
+objects.append(cube)
+
+cube2 = Object("Cube2")
+cube2.add_component(Transform((0, 1, 0)))
+cube2.add_component(Cube(GL_POLYGON, "../images/brick2.tif"))
+
+objects.append(cube2)
 
 while not done:
     for event in pygame.event.get():
@@ -34,7 +48,8 @@ while not done:
             done = True
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glRotatef(1, 1, 0, 1)
-    cube.draw()
+    for obj in objects:
+        obj.update()
     pygame.display.flip()
     pygame.time.wait(16)
 pygame.quit()
