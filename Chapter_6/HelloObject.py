@@ -42,6 +42,8 @@ cube2.add_component(Cube(GL_POLYGON, "../images/brick2.tif"))
 
 objects.append(cube2)
 
+clock = pygame.time.Clock()
+fps = 60
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -51,5 +53,7 @@ while not done:
     for obj in objects:
         obj.update()
     pygame.display.flip()
-    pygame.time.wait(16)
+    # pygame.time.wait(16)
+    # print('tick={}, fps={}'.format(clock.tick(), clock.get_fps()))
+    clock.tick(fps)
 pygame.quit()
