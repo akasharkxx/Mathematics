@@ -40,32 +40,35 @@ fps = 30
 def set_2D():
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluOrtho2D(0, screen.get_width(), 0, screen.get_height())
+    gluOrtho2D(0, 1600, 0, 1200)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     glViewport(0, 0, screen.get_width(), screen.get_height())
 
+
 def set_3D():
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60, (screen_width/screen_height), 0.1, 100.0)
+    gluPerspective(60, (screen_width / screen_height), 0.1, 100.0)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     glViewport(0, 0, screen.get_width(), screen.get_height())
     glEnable(GL_DEPTH_TEST)
 
+
 while not done:
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
             done = True
     glPushMatrix()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     set_3D()
     for o in objects_3D:
-        o.update()
+        o.update(events)
     set_2D()
     for o in objects_2D:
-        o.update()
+        o.update(events)
     glPopMatrix()
     pygame.display.flip()
     clock.tick(fps)

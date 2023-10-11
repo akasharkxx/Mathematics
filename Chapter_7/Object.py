@@ -2,6 +2,7 @@ from Mesh3D import *
 from Transform import *
 from Button import *
 
+
 class Object:
     def __init__(self, obj_name):
         self.name = obj_name
@@ -12,7 +13,7 @@ class Object:
             self.components.insert(0, self.components)
         self.components.append(component)
 
-    def update(self):
+    def update(self, events=None):
         glPushMatrix()
         for c in self.components:
             if isinstance(c, Transform):
@@ -21,5 +22,5 @@ class Object:
             if isinstance(c, Mesh3D):
                 c.draw()
             if isinstance(c, Button):
-                c.draw()
+                c.draw(events)
         glPopMatrix()
