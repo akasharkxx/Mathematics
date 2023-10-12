@@ -13,6 +13,12 @@ class Object:
             self.components.insert(0, self.components)
         self.components.append(component)
 
+    def get_component(self, class_type):
+        for c in self.components:
+            if type(c) is class_type:
+                return c
+        return None
+
     def update(self, events=None):
         glPushMatrix()
         for c in self.components:

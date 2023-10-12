@@ -6,14 +6,12 @@ from Button import *
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from Settings import *
 
 pygame.init()
 
-screen_width = 800
-screen_height = 600
-
 pygame.display.set_caption('OpenGL in Python')
-screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), DOUBLEBUF | OPENGL)
 
 done = False
 
@@ -21,6 +19,9 @@ white = pygame.Color(255, 255, 255)
 blue = pygame.Color(0, 0, 255)
 red = pygame.Color(255, 0, 0)
 green = pygame.Color(0, 255, 0)
+
+def button_click():
+    print("Button Clicked")
 
 objects_3D = []
 objects_2D = []
@@ -31,7 +32,7 @@ cube.add_component(Cube(GL_POLYGON, '../images/brick.tif'))
 objects_3D.append(cube)
 
 button1 = Object("Button")
-button1.add_component(Button(screen, (0, 0), 100, 50, white, green, blue))
+button1.add_component(Button(screen, (0, 0), 100, 50, white, green, blue, button_click))
 objects_2D.append(button1)
 
 clock = pygame.time.Clock()
@@ -40,7 +41,7 @@ fps = 30
 def set_2D():
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluOrtho2D(0, 1600, 0, 1200)
+    gluOrtho2D(0, ORTHO_SCREEN_WIDTH, 0, ORTHO_SCREEN_HEIGHT)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     glViewport(0, 0, screen.get_width(), screen.get_height())
@@ -49,18 +50,30 @@ def set_2D():
 def set_3D():
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60, (screen_width / screen_height), 0.1, 100.0)
+    gluPerspective(60, (SCREEN_WIDTH / SCREEN_HEIGHT), 0.1, 100.0)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     glViewport(0, 0, screen.get_width(), screen.get_height())
     glEnable(GL_DEPTH_TEST)
 
+trans: Transform = cube.get_component(Transform)
+move_value = 0.1
 
 while not done:
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
             done = True
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        trans.move_x(-move_value)
+    elif keys[pygame.K_RIGHT]:
+        trans.move_x(move_value)
+    elif keys[pygame.K_UP]:
+        trans.move_y(move_value)
+    elif keys[pygame.K_DOWN]:
+        trans.move_y(-move_value)
+
     glPushMatrix()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     set_3D()
